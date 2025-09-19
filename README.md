@@ -1,16 +1,17 @@
 CareFlow - Smart Hospital Kiosk
 <p align="center">
-<img src="https://www.google.com/search?q=https://i.imgur.com/8F9b6gG.png" alt="CareFlow Logo" width="120">
+<!-- Use a relative path to the image inside your project -->
+<img src="./assets/careflow-logo.png" alt="CareFlow Logo" width="120">
 </p>
 
 <h3 align="center">A modern, multi-language patient management kiosk designed to simplify the hospital experience.</h3>
 
 <p align="center">
-<img src="https://www.google.com/search?q=https://i.imgur.com/UaTc3g1.png" alt="CareFlow Application Screenshot">
+<!-- Use a relative path for the screenshot as well -->
+<img src="./assets/careflow-screenshot.png" alt="CareFlow Application Screenshot" width="700">
 <br>
 <em>CareFlow's main dashboard in English.</em>
 </p>
-
 🌟 Introduction
 CareFlow is a patient-facing web application designed to run on kiosks in a hospital lobby. It tackles the confusion and stress of hospital visits by providing a simple, intuitive, and multi-language interface for core patient services. From getting a consultation token to booking a bed, CareFlow streamlines the entire process, reducing wait times and improving patient satisfaction.
 
