@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareFlow - Hospital Helper</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z" fill="currentColor"/>
+                </svg>
+                <h1 data-lang="careflowTitle">CareFlow</h1>
+            </div>
+            <div class="language-selector">
+                <select id="languageSelector" class="form-control">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="ta">தமிழ்</option>
+                    <option value="ml">മലയാളം</option>
+                </select>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- General OPD Token Card (Moved to top and enlarged) -->
+            <div class="info-card general-opd-card">
+                 <div class="card-header">
+                    <p data-lang="generalOpdToken">General OPD Token</p>
+                    <span class="icon">🎟️</span>
+                </div>
+                <div class="card-body">
+                     <p data-lang="generalTokenDesc">Get a general token and the next available doctor will see you.</p>
+                </div>
+                <div class="card-footer">
+                    <button id="generalTokenBtn" class="btn btn--secondary btn--full-width" data-lang="getGeneralToken">Get General Token</button>
+                </div>
+            </div>
+
+            <!-- AI OPD Forecast Card -->
+            <div class="info-card forecast-card">
+                <div class="card-header">
+                    <p data-lang="aiOpdForecast">AI OPD Forecast</p>
+                    <span class="graph-icon"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 12h2.5l2-4 3.5 7 3-5 2.5 3H21" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </div>
+                <div class="card-body">
+                    <h2 id="forecastPatients">134 Patients</h2>
+                    <p id="forecastWaitTime">Avg. wait time: 45 mins</p>
+                </div>
+            </div>
+
+            <!-- Bed Availability Card -->
+            <div class="info-card">
+                <div class="card-header">
+                    <p data-lang="bedAvailability">Bed Availability</p>
+                    <span class="icon">🛏️</span>
+                </div>
+                <div class="card-body">
+                    <h2 id="availableBeds">13 Beds</h2>
+                    <p data-lang="acrossAllWards">Across all wards</p>
+                </div>
+            </div>
+
+            <!-- Bed Admission Card -->
+            <div class="info-card">
+                <div class="card-header">
+                    <p data-lang="bedAdmission">Bed Admission</p>
+                    <span class="icon">📖</span>
+                </div>
+                <div class="card-body">
+                    <h2 id="freeBeds">13 Beds Free</h2>
+                    <p data-lang="customizeStay">Customize your stay</p>
+                </div>
+                <div class="card-footer">
+                    <button id="bookBedBtn" class="btn btn--primary btn--full-width" data-lang="bookBed">Book a Bed</button>
+                </div>
+            </div>
+            
+            <!-- Emergency Card -->
+            <div class="info-card emergency-card">
+                <div class="card-header">
+                    <p data-lang="emergency">Emergency?</p>
+                    <span class="icon">🚨</span>
+                </div>
+                <div class="card-body">
+                    <p data-lang="emergencyDesc">Click here for immediate assistance. No forms needed.</p>
+                </div>
+                <div class="card-footer">
+                    <button id="emergencyBtn" class="btn btn--danger btn--full-width" data-lang="getEmergencyToken">Get Emergency Token</button>
+                </div>
+            </div>
+            
+            <!-- Doctor Availability Section -->
+            <div class="doctor-section">
+                <div class="section-header">
+                    <h3 data-lang="doctorAvailability">Doctor Availability</h3>
+                    <select id="departmentFilter" class="form-control">
+                        <option value="All" data-lang="allDepartments">All Departments</option>
+                        <option value="General" data-lang="deptGeneral">General</option>
+                        <option value="Cardiology" data-lang="deptCardiology">Cardiology</option>
+                        <option value="Orthopedics" data-lang="deptOrthopedics">Orthopedics</option>
+                        <option value="Pediatrics" data-lang="deptPediatrics">Pediatrics</option>
+                    </select>
+                </div>
+                <div id="doctorList" class="doctor-list">
+                    <!-- Doctor cards will be dynamically inserted here -->
+                </div>
+            </div>
+        </main>
+        
+        <!-- Floating Help Desk Button -->
+        <button id="helpDeskBtn" class="fab">
+            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" fill="white"/></svg>
+            <span data-lang="helpDesk">Help Desk</span>
+        </button>
+    </div>
+
+    <!-- Modals -->
+    <div id="tokenModal" class="modal-wrapper hidden">
+        <div class="modal-content">
+            <button class="modal-close" data-modal-id="tokenModal">&times;</button>
+            <h3 id="tokenModalTitle" data-lang="getToken">Get Token</h3>
+            <p class="modal-subtitle" id="tokenModalSubtitle" data-lang="howToReceiveToken">How would you like to receive your token?</p>
+            <button id="tokenViaWhatsappBtn" class="btn btn--primary btn--full-width" data-lang="tokenWithWhatsapp">📞 Get Token with WhatsApp Updates</button>
+            <button id="tokenForKioskBtn" class="btn btn--secondary btn--full-width" data-lang="tokenForKiosk">🖨️ Just Get Token (for Kiosk)</button>
+            <p class="modal-footnote" data-lang="kioskDesc">Choose this if you are at a hospital kiosk.</p>
+            <button class="btn btn--tertiary btn--full-width" data-modal-id="tokenModal" data-lang="cancel">Cancel</button>
+        </div>
+    </div>
+    
+    <div id="tokenIssuedModal" class="modal-wrapper hidden">
+         <div class="modal-content token-issued-content">
+            <div class="token-issued-icon">✅</div>
+            <h3 data-lang="tokenIssued">Token Issued!</h3>
+            <p class="modal-subtitle" data-lang="yourTokenNumberIs">Your token number is</p>
+            <div id="issuedTokenNumber" class="issued-token-number">G-101</div>
+            <p class="modal-footnote" id="issuedTokenDoctor"></p>
+            <button class="btn btn--primary btn--full-width" data-modal-id="tokenIssuedModal" data-lang="done">Done</button>
+        </div>
+    </div>
+
+    <div id="bedBookingModal" class="modal-wrapper hidden">
+        <div class="modal-content">
+            <button class="modal-close" data-modal-id="bedBookingModal">&times;</button>
+            <h3><span class="icon">🛏️</span><span data-lang="bedBookingTitle"> Bed Booking & Customization</span></h3>
+            <p class="modal-subtitle" data-lang="bedBookingDesc">Select ward type and preferences. Admission requires a doctor's slip.</p>
+            <div class="booking-grid">
+                <div class="booking-options">
+                    <div class="form-section">
+                        <h4 data-lang="selectWard">1. Select Ward Type</h4>
+                        <div id="wardSelection" class="ward-options"></div>
+                    </div>
+                    <div class="form-section">
+                        <h4 data-lang="specialServices">2. Special Services</h4>
+                        <div id="serviceSelection" class="service-options"></div>
+                    </div>
+                </div>
+                <div class="booking-payment">
+                    <div class="booking-summary">
+                        <h4 data-lang="bookingSummary">Booking Summary</h4>
+                        <div class="summary-item">
+                            <span data-lang="wardType">Ward Type</span>
+                            <strong id="summaryWard">--</strong>
+                        </div>
+                        <div class="summary-item total">
+                            <span data-lang="totalPerDay">Total (Per Day)</span>
+                            <strong id="summaryTotal">₹ 0</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-section">
+                         <h4 data-lang="paymentMethod">Payment Method</h4>
+                         <div class="payment-method-options">
+                            <label for="pay-qr">
+                                <input type="radio" id="pay-qr" name="paymentMethod" value="qr" checked>
+                                <div class="payment-option" data-lang="payByQR">UPI / QR Code</div>
+                            </label>
+                            <label for="pay-cash">
+                                <input type="radio" id="pay-cash" name="paymentMethod" value="cash">
+                                <div class="payment-option" data-lang="payByCash">Cash at Counter</div>
+                            </label>
+                         </div>
+
+                         <div id="qr-payment-info" class="payment-info-area">
+                             <p class="modal-subtitle" data-lang="scanQr">Scan QR to complete payment</p>
+                             <div class="qr-code-placeholder">
+                                 <svg viewBox="0 0 100 100"><path fill="#333" d="M0 0h30v30H0z M70 0h30v30H70z M0 70h30v30H0z M10 10h10v10H10z M80 10h10v10H80z M10 80h10v10H10z M40 0h10v10H40z M50 10h10v10H50z M40 20h10v10H40z M50 30h10v10H50z M40 40h10v10H40z M50 50h10v10H50z M40 60h10v10H40z M50 70h10v10H50z M40 80h10v10H40z M50 90h10v10H50z M0 40h10v10H0z M10 50h10v10H10z M20 40h10v10H20z M30 50h10v10H30z M70 40h10v10H70z M80 50h10v10H80z M90 40h10v10H90z M70 60h10v10H70z M80 70h10v10H80z M90 60h10v10H90z M70 80h10v10H70z M80 90h10v10H80z M90 80h10v10H90z"/></svg>
+                             </div>
+                         </div>
+                         <div id="cash-payment-info" class="payment-info-area hidden">
+                             <p class="modal-subtitle" data-lang="cashInstructionsTitle">Instructions for Cash Payment</p>
+                             <p class="cash-instructions" data-lang="cashInstructionsBody">Please don't fold the cash. Insert notes properly into the machine under the counter.</p>
+                         </div>
+                    </div>
+                    <button id="confirmBookingBtn" class="btn btn--primary btn--full-width" data-lang="confirmBooking">Confirm Booking</button>
+                    <button class="btn btn--tertiary btn--full-width" data-modal-id="bedBookingModal" data-lang="cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="helpDeskModal" class="modal-wrapper hidden">
+         <div class="modal-content token-issued-content">
+            <div class="token-issued-icon">👋</div>
+            <h3 data-lang="helpIsOnTheWay">Help is on the way!</h3>
+            <p class="modal-subtitle" data-lang="helpDeskMessage">The staff will get you soon. Please wait a minute, they are arriving.</p>
+            <button class="btn btn--primary btn--full-width" data-modal-id="helpDeskModal" data-lang="done">Done</button>
+        </div>
+    </div>
+    
+    <div id="emergencyModal" class="modal-wrapper hidden">
+         <div class="modal-content token-issued-content emergency-modal-content">
+            <div class="token-issued-icon">🚨</div>
+            <h3 data-lang="emergencyAlertTitle">Emergency Alert!</h3>
+            <p class="modal-subtitle" data-lang="emergencyAlertMessage">Please proceed to the Emergency Room immediately. Staff have been notified.</p>
+            <button class="btn btn--danger btn--full-width" data-modal-id="emergencyModal" data-lang="done">Understood</button>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
+
